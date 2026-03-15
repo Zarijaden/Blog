@@ -230,7 +230,7 @@ navbar:
     Bookmarks:
       icon: fa-solid fa-bookmark #图标
       path: /bookmarks/
-    Masonry:
+    相册:
       icon: fa-solid fa-image #图标
       path: /masonry/
     设置:
