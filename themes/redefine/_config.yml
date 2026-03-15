@@ -233,6 +233,9 @@ navbar:
     相册:
       icon: fa-solid fa-image #图标
       path: /masonry/
+    gh链接转换器:
+      icon: fa-brands fa-cloudflare
+      path: /gh-cf/
     设置:
       icon: fa-solid fa-gear
       path: /hpp/admin/login
