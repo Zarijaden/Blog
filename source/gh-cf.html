@@ -113,17 +113,17 @@
 <body>
   <div class="container">
     <h1>GitHub链接转换工具</h1>
-    <label for="githubUrl">输入GitHub仓库链接</label>
+    <label for="githubUrl">输入GitHub链接</label>
     <input type="url" id="githubUrl"
-           placeholder="例如：https://github.com/username/repository-name"
+           placeholder="例如：https://github.com/username/repository-name 或 https://github.com"
            spellcheck="false">
     <button id="convertBtn">立即转换</button>
     <div class="example">
-      支持的链接格式：https://github.com/作者名/仓库名
+      支持的链接格式：任何以 https://github.com 开头的链接
     </div>
 
     <div class="error-message" id="errorMessage">
-      请输入一个有效的GitHub仓库链接。
+      请输入一个有效的GitHub链接。
     </div>
 
     <div class="result" id="result">
@@ -139,8 +139,8 @@
     const convertedLinkElem = document.getElementById('convertedLink');
     const errorMessageDiv = document.getElementById('errorMessage');
 
-    // GitHub链接正则表达式
-    const githubUrlPattern = /^https:\/\/(github\.com)\/([^\/]+)\/([^\/]+)(\/.*)?$/;
+    // 修改后的GitHub链接正则表达式 - 移除了对"作者名/仓库名"的强制要求
+    const githubUrlPattern = /^(https:\/\/github\.com)(\/.*)?$/;
 
     function convertUrl() {
       const originalUrl = inputField.value.trim();
@@ -158,11 +158,16 @@
       }
 
       // 解析链接各部分
-      const [, originalDomain, owner, repo, path = ''] = match;
+      const [, domainPart, path = ''] = match;
+      
+      // 从域名部分提取出"github.com"（去除https://前缀）
+      const originalDomain = domainPart.replace('https://', '');
+      
       // 转换域名（将点号替换为连字符并添加后缀）
       const convertedDomain = originalDomain.replace(/\./g, '-') + '-gh.zarijaden.cc.cd';
+      
       // 构建新链接
-      const newUrl = `https://${convertedDomain}/${owner}/${repo}${path}`;
+      const newUrl = `https://${convertedDomain}${path}`;
 
       // 更新结果区域的链接
       convertedLinkElem.href = newUrl;
