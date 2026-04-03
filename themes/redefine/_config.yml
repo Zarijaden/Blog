@@ -184,7 +184,7 @@ home_banner:
         url: Zarijaden@163.com
       - icon: fa-brands fa-bilibili
         url: https://space.bilibili.com/3493135097269095
-      - icon: /images/x-twitter-brands-solid.png
+      - icon: fa-brands fa-x-twitter
         url: https://x.com/Zarijaden_1726
     # Social links with QRcode drawers
     qrs:
