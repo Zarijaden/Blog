@@ -3,7 +3,7 @@ content:
   - name: pages
     label: Pages
     type: collection
-    path: docs
+    path: source/_posts
     fields:
       - name: title
         type: string
