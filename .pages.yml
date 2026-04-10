@@ -1,5 +1,5 @@
 media: 
-  input: sourse/images
+  input: source/images
   output: /media
 content:
   - name: posts
