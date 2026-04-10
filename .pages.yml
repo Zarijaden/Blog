@@ -1,7 +1,7 @@
 media: media
 content:
-  - name: pages
-    label: Pages
+  - name: posts
+    label: Posts
     type: collection
     path: source/_posts
     fields:
