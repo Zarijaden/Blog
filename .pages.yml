@@ -9,3 +9,10 @@ content:
         type: string
       - name: body
         type: rich-text
+  - name: pics
+    label: Pics
+    type: collection
+    path: source/images
+    fields:
+      - name: title
+        type: string
