@@ -1,4 +1,6 @@
-media: media
+media: 
+  input: sourse/images
+  output: /media
 content:
   - name: posts
     label: Posts
@@ -9,10 +11,3 @@ content:
         type: string
       - name: body
         type: rich-text
-  - name: pics
-    label: Pics
-    type: collection
-    path: source/images
-    fields:
-      - name: title
-        type: string
