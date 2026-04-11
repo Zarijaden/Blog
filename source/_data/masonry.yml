@@ -1,172 +1,133 @@
 # Masonry gallery configuration 
+- image: /images/masonry/IMG_20260315_184444.jpg 
+  exif: true
+- image: /images/masonry/IMG_20260404_172504.jpg 
+  exif: true
+- image: /images/masonry/IMG_20260404_172521.jpg 
+  exif: true
+- image: /images/masonry/IMG_20260404_173551.jpg 
+  exif: true
+- image: /images/masonry/IMG_20260404_173637.jpg 
+  exif: true
+- image: /images/masonry/IMG_20260404_173656.jpg 
+  exif: true
 - image: /images/masonry/2025-01-26_12.47.16.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/2025-01-26_13.02.55.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/2025-01-29_13.22.11.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/2025-01-29_16.05.56.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/2025-01-29_16.06.13.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/2025-01-29_16.06.27.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/2025-01-29_16.06.39.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/2025-01-29_16.06.45.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/2025-01-29_16.43.07.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/2025-01-29_19.03.48.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/2025-01-29_19.08.27.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/2025-01-29_19.09.52.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/2025-01-29_19.10.28.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/2025-01-29_19.25.09.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/2025-02-10_15.46.27_3.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/2025-02-10_17.42.04.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/2025-02-10_17.42.06.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/2025-02-22_16.48.33.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/2025-07-04_21.20.27.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/2025-07-05_18.32.38.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/2025-07-07_13.02.56.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/2025-07-12_22.40.06.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/2025-07-12_22.40.31.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/2025-07-17_18.52.07.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/2025-07-17_18.55.11.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/2025-07-17_18.55.31.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/freecompress-2024-07-31_10.48.13.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/freecompress-2024-07-31_16.23.48.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/freecompress-2024-08-01_09.58.35.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/freecompress-2024-08-01_10.22.33.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/freecompress-2024-08-02_12.21.37.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/freecompress-2024-08-02_12.21.59 (1).webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/freecompress-2024-08-02_12.24.58.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/freecompress-2024-08-02_12.53.30.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/freecompress-2024-08-05_12.10.27.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/freecompress-2024-08-05_12.34.21.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/freecompress-2024-08-06_13.11.27.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/freecompress-2024-08-06_16.14.50.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/freecompress-2024-08-07_11.16.58.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/freecompress-2024-08-07_11.17.13.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/freecompress-2024-08-07_11.31.35.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/freecompress-2024-08-07_12.27.44.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/freecompress-2024-08-07_14.00.48.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/freecompress-2024-08-07_14.01.19.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/freecompress-2024-08-08_14.48.41.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/freecompress-2024-08-08_14.52.38.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/freecompress-2024-08-23_09.56.49.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/freecompress-2024-08-23_09.56.59.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/freecompress-2024-08-23_10.51.30.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/freecompress-2024-08-28_15.51.02.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/freecompress-2024-08-29_10.25.49.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/freecompress-2024-08-29_16.35.43(1).webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/freecompress-2024-08-30_11.46.58.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/freecompress-2024-09-22_16.39.22.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/freecompress-2024-09-22_16.48.24.webp 
-  title: 
-  description: 
+  exif: 
 - image: /images/masonry/freecompress-2024-10-20_20.14.30.webp 
+<<<<<<< Updated upstream
   title: 
   description: 
 - image: /images/masonry/IMG_20260315_184447.webp 
   exif: true 
   description: 
+=======
+  exif: 
+>>>>>>> Stashed changes
