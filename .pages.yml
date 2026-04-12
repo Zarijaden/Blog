@@ -1,20 +1,11 @@
 media: 
-  input: source/images
+  input: source/
   output: /media
 content:
   - name: posts
     label: Posts
     type: collection
     path: source/_posts
-    fields:
-      - name: title
-        type: string
-      - name: body
-        type: rich-text
-  - name: data
-    label: Data
-    type: collection
-    path: source/_data
     fields:
       - name: title
         type: string
