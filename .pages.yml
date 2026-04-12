@@ -11,3 +11,12 @@ content:
         type: string
       - name: body
         type: rich-text
+  - name: data
+    label: Data
+    type: collection
+    path: source/_data
+    fields:
+      - name: title
+        type: string
+      - name: body
+        type: rich-text
