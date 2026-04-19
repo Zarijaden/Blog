@@ -1,9 +1,7 @@
 name: Deploy Hexo site to Pages
 
 on:
-  # 当代码推送到 main 分支时触发
-  push:
-    branches: ["main"]
+  # 当代码推送到 main 分支时触
   # 允许从 Actions 标签页手动触发此工作流
   workflow_dispatch:
 
