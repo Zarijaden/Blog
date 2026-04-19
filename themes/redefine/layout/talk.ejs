@@ -1,0 +1,23 @@
+<% /* themes/redefine/layout/talk.ejs */ %>
+<%- partial('_partial/head') %>
+<body>
+  <%- partial('_partial/header') %>
+
+  <main class="main">
+    <div class="container">
+      <h1 class="page-title">我的说说</h1>
+      <div id="hpp-talk-container">
+        <!-- 说说列表将动态加载到这里 -->
+        <p>正在加载说说...</p>
+      </div>
+      <div id="load-more" style="text-align: center; margin: 20px;">
+        <button onclick="loadMore()" style="padding: 10px 20px;">加载更多</button>
+      </div>
+    </div>
+  </main>
+
+  <%- partial('_partial/footer') %>
+  <!-- 引入我们即将编写的JS -->
+  <script src="<%- url_for('/js/talk.js') %>"></script>
+</body>
+</html>
