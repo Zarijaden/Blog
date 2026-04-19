@@ -41,7 +41,7 @@ jobs:
 
       - name: Build with Hexo
         # Hexo 默认构建命令，输出目录为 ./public
-        run: npm install hexo-deployer-git --save
+        run: hexo d
       - name: Push
         run: |
             git config user.name Zarijaden
