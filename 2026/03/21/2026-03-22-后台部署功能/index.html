@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta name="msvalidate.01" content="44C56A1C86BE1A049FAF7818C95FFFC5" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="zarijaden blog, Zarijaden, zarijaden">
+    
+    
+    <meta name="author" content="Zarijaden">
+    
+    <!-- Completely eliminate flash of wrong theme -->
+    <script>
+        (function() {
+            const THEME_KEY = "REDEFINE-THEME-STATUS";
+            const DARK = "dark", LIGHT = "light";
+            
+            // Get preferred theme
+            function getTheme() {
+                try {
+                    const saved = localStorage.getItem(THEME_KEY);
+                    if (saved) {
+                        const { isDark } = JSON.parse(saved);
+                        return isDark ? DARK : LIGHT;
+                    }
+                } catch (e) {}
+                
+                return matchMedia("(prefers-color-scheme: dark)").matches ? DARK : LIGHT;
+            }
+            
+            // Apply theme to document
+            function applyTheme(theme) {
+                const isDark = theme === DARK;
+                const root = document.documentElement;
+                
+                // Set classes for compatibility
+                root.classList.add(theme);
+                root.classList.remove(isDark ? LIGHT : DARK);
+                root.style.colorScheme = theme;
+            }
+            
+            // Initial application
+            const theme = getTheme();
+            applyTheme(theme);
+            
+            // Listen for system preference changes
+            matchMedia("(prefers-color-scheme: dark)").addEventListener("change", ({ matches }) => {
+                // Only update if using system preference (no localStorage entry)
+                if (!localStorage.getItem(THEME_KEY)) {
+                    applyTheme(matches ? DARK : LIGHT);
+                }
+            });
+            
+            // Set body classes ASAP (before DOMContentLoaded)
+            (function() {
+                const addBodyClass = () => {
+                    const b = document.body;
+                    if (!b) return false;
+                    b.classList.add(theme + "-mode");
+                    return true;
+                };
+
+                // Try immediately
+                if (addBodyClass()) return;
+
+                // Observe until body exists
+                const mo = new MutationObserver(() => {
+                    if (addBodyClass()) mo.disconnect();
+                });
+                mo.observe(document.documentElement, { childList: true, subtree: true });
+            })();
+        })();
+    </script>
+    
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+        
+        
+        
+            <link rel="preconnect" href="https://evan.beee.top" crossorigin>
+        
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://zarijaden.cc.cd/2026/03/21/2026-03-22-后台部署功能/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+    
+        
+        <meta name="description" content="Zarijaden 的个人博客与知识库，专注于网站开发、Cloudflare 应用、Hexo 主题定制等技术实践分享，同时记录AI写作与日常。探索数字生活的无限可能">
+<meta property="og:type" content="article">
+<meta property="og:title" content="后台手动部署网站功能">
+<meta property="og:url" content="http://zarijaden.cc.cd/2026/03/21/2026-03-22-%E5%90%8E%E5%8F%B0%E9%83%A8%E7%BD%B2%E5%8A%9F%E8%83%BD/index.html">
+<meta property="og:site_name" content="Zarijaden Blog">
+<meta property="og:description" content="Zarijaden 的个人博客与知识库，专注于网站开发、Cloudflare 应用、Hexo 主题定制等技术实践分享，同时记录AI写作与日常。探索数字生活的无限可能">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://zarijaden.cc.cd/images/redefine-og.webp">
+<meta property="article:published_time" content="2026-03-21T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-20T12:00:49.450Z">
+<meta property="article:author" content="Zarijaden">
+<meta property="article:tag" content="开发日志">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://zarijaden.cc.cd/images/redefine-og.webp">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/logo.jpg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/logo.jpg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/logo.jpg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            后台手动部署网站功能 | Zarijaden Blog
+        
+    </title>
+
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/fonts/Chillax/chillax.css">
+
+    <!--- Inject Part-->
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/css/build/tailwind.css">
+    
+
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/fonts/GeistMono/geist-mono.css">
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/fonts/Geist/geist.css">
+    <!--- Font Part-->
+    
+    
+    
+    
+    
+    
+        <script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/anime.min.js" ></script>
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"zarijaden.cc.cd","root":"/","language":"zh-CN","path":"search.json"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"delete_mask":true,"title_alignment":"left","headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":false},"author_label":{"enable":false,"auto":false,"list":[]},"code_block":{"copy":true,"style":"simple","highlight_theme":{"light":"github","dark":"vs2015"},"font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"pangu_js":false,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null},"title":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":true,"percentage":false},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":{"enable":true,"custom_message":"Zarijaden Blog"},"side_tools":{"gear_rotation":true,"auto_expand":false},"open_graph":{"enable":true,"image":"/images/redefine-og.webp","description":null},"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"Zarijaden Blog","subtitle":{"text":["万物可爱，生活明朗","不以物喜，不以己悲","坐和放宽","lo and behold"],"hitokoto":{"enable":false,"show_author":false,"api":"https://v1.hitokoto.cn"},"typing_speed":80,"backing_speed":80,"starting_delay":16,"backing_delay":1500,"loop":true,"smart_backspace":false},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":true,"style":"default","links":[{"icon":"fa-brands fa-github","url":"https://github.com/Zarijaden"},{"icon":"fa-brands fa-instagram","url":"https://instagram.com/Zarijaden"},{"icon":"fa-solid fa-at","url":"Zarijaden@163.com"},{"icon":"fa-brands fa-bilibili","url":"https://space.bilibili.com/3493135097269095"},{"icon":"fa-brands fa-qq","url":"https://qm.qq.com/q/oo8NhayWYw"}],"qrs":[{"icon":"fa-brands fa-weixin","qr":null},{"icon":"/images/custom-icon.svg","qr":null}]}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"11.4.1","theme":{"light":"default","dark":"dark"}}},"version":"2.9.0","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"About":{"path":"https://about.zarijaden.cc.cd","icon":"fa-regular fa-user"},"Bookmarks":{"icon":"fa-solid fa-bookmark","path":"/bookmarks/"},"相册":{"icon":"fa-solid fa-image","path":"/masonry/"},"时间轴":{"icon":"fa-solid fa-code-branch","path":"/timeline/"},"更多":{"icon":"fa-solid fa-circle-plus","submenus":{"gh链接转换器":"/gh-cf/","设置":"/hpp/admin/login"}}},"search":{"enable":true,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur","masonry":{"batch_size":12,"initial_batch_size":24}},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":{"Tags":{"path":"/tags","icon":"fa-regular fa-tags"},"Links":{"path":"/links/","icon":"fa-regular fa-link"}}},"article_date_format":"auto","excerpt_length":200,"categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footer":{"runtime":true,"icon":"<i class=\"fa-solid fa-heart fa-beat\" style=\"--fa-animation-duration: 0.5s; color: #f54545\"></i>","start":"2026/2/14 20:00:00","statistics":true,"customize":null,"icp":{"enable":false,"number":null,"url":null}},"footerStart":"2026/2/14 20:00:00","mermaid":{"style":{"light":"default","dark":"dark"}}};
+    window.lang_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"};
+    window.i18n = {"search":"站内搜索您需要的内容...","toc":"目录","prev":"上一页","next":"下一页","prev_posts":"上一篇","next_posts":"下一篇","page":"第 %d 页","recent_posts":"最新文章","share":"分享","powered_by":"由 %s 驱动","theme":"主题","rss_feed":"RSS Feed","category":"分类","categories":"分类","tag":"标签","tags":"标签","post":"文章","posts":"文章","tagcloud":"标签云","comment":"评论","comments":"评论","top":"置顶","sticky":"置顶","go-back-home":"回到首页","masonry_loading":"照片加载中...","image_viewer":"图片查看器","close":"关闭","exif":{"title":"EXIF","cards":{"camera":"相机","lens":"镜头","exposure":"曝光","other":"其他"},"fields":{"make":"品牌","model":"机型","date_taken":"拍摄时间","lens_model":"镜头","focal_length":"焦距","focus_mode":"对焦模式","shutter":"快门","aperture":"光圈","iso":"感光度","exposure_program":"曝光程序","exposure_compensation":"曝光补偿","metering_mode":"测光模式","flash":"闪光灯","white_balance":"白平衡","latitude":"纬度","longitude":"经度","altitude":"海拔"},"status":{"loading":"加载中...","no_exif":"无 EXIF 信息","library_missing":"EXIF 库未加载","image_source_missing":"图片地址不可用","unavailable":"EXIF 不可用（可能被 CORS 阻止或缺少元数据）","flag_unavailable":"EXIF 不可用"}},"home":"首页","archive":"归档","archives":"归档","about":"关于","links":"链接","link":"链接","friends":"友情链接","friend":"友情链接","timeline":"时间轴","shuoshuo":"说说","bookmarks":"书签","site_uv":"访问人数","site_pv":"总访问量","read_more":"阅读全文","wordcount":"字","min2read":"分钟","changelog":"更新日志","status":"状态","runtime":"博客已运行","days":"天","hours":"小时","minutes":"分钟","seconds":"秒","optimized_by":"并由 Evan 进行优化","rights":"版权所有","site_posts":"共撰写了 %s 篇文章","site_wordcount":"共 %s 字","copyright":{"title":"标题","author":"作者","link":"链接","create_time":"创建于","update_time":"更新于","license_title":"版权声明","license_content":"本文章采用 %s 进行许可。","all_rights_reserved":"版权所有 &#169 %s，禁止转载。","public_domain":"本文为公有领域作品，可自由转载、引用。"},"ago":{"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"},"create_time":"创建","update_time":"更新","expired":"这篇文章最后更新于 %s 天前，内容可能已经过时。"};
+    window.data = {"masonry":true};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/fontawesome/fontawesome.min.css">
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/fontawesome/brands.min.css">
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/fontawesome/solid.min.css">
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/fontawesome/regular.min.css">
+    
+    
+    
+    
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+	<div class="progress-bar-container">
+	
+	<span class="scroll-progress-bar"></span>
+	
+
+	
+	<span class="pjax-progress-bar"></span>
+	<!--        <span class="swup-progress-icon">-->
+	<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+	<!--        </span>-->
+	
+</div>
+
+<style>
+    :root {
+        --preloader-background-color: #fff;
+        --preloader-text-color: #000;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --preloader-background-color: #202124;
+            --preloader-text-color: #fff;
+        }
+    }
+
+    @media (prefers-color-scheme: light) {
+        :root {
+            --preloader-background-color: #fff;
+            --preloader-text-color: #000;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .ml13 {
+            font-size: 2.6rem !important; /* Adjust this value as needed */
+        }
+    }
+
+    .preloader {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem; /* Tailwind 'gap-4' is 1rem */
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        padding: 12px;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh; /* 'h-screen' is 100% of the viewport height */
+        background-color: var(--preloader-background-color);
+        z-index: 1100; /* 'z-[1100]' sets the z-index */
+        transition: opacity 0.2s ease-in-out;
+    }
+
+    .ml13 {
+        font-size: 3.2rem;
+        /* text-transform: uppercase; */
+        color: var(--preloader-text-color);
+        letter-spacing: -1px;
+        font-weight: 500;
+        font-family: 'Chillax-Variable', sans-serif;
+        text-align: center;
+    }
+
+    .ml13 .word {
+        display: inline-flex;
+        flex-wrap: wrap;
+        white-space: nowrap;
+    }
+
+    .ml13 .letter {
+        display: inline-block;
+        line-height: 1em;
+    }
+</style>
+
+<div class="preloader">
+    <h2 class="ml13">
+        Zarijaden Blog
+    </h2>
+    <script>
+        var textWrapper = document.querySelector('.ml13');
+        // Split text into words
+        var words = textWrapper.textContent.trim().split(' ');
+
+        // Clear the existing content
+        textWrapper.innerHTML = '';
+
+        // Wrap each word and its letters in spans
+        words.forEach(function(word) {
+            var wordSpan = document.createElement('span');
+            wordSpan.classList.add('word');
+            wordSpan.innerHTML = word.replace(/\S/g, "<span class='letter'>$&</span>");
+            textWrapper.appendChild(wordSpan);
+            textWrapper.appendChild(document.createTextNode(' ')); // Add space between words
+        });
+
+        var animation = anime.timeline({ loop: true })
+            .add({
+                targets: '.ml13 .letter',
+                translateY: [20, 0],
+                translateZ: 0,
+                opacity: [0, 1],
+                filter: ['blur(5px)', 'blur(0px)'],
+                easing: "easeOutExpo",
+                duration: 1200,
+                delay: (el, i) => 300 + 20 * i,
+            })
+            .add({
+                targets: '.ml13 .letter',
+                translateY: [0, -20],
+                opacity: [1, 0],
+                filter: ['blur(0px)', 'blur(5px)'],
+                easing: "easeInExpo",
+                duration: 1000,
+                delay: (el, i) => 15 * i,
+                complete: function() {
+                    hidePreloader();
+                }
+            }, '-=700');
+
+
+        let themeStatus = JSON.parse(localStorage.getItem('REDEFINE-THEME-STATUS'))?.isDark;
+
+        // If the theme status is not found in local storage, check the preferred color scheme
+        if (themeStatus === undefined || themeStatus === null) {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                themeStatus = 'dark';
+            } else {
+                themeStatus = 'light';
+            }
+        }
+
+        // Now you can use the themeStatus variable in your code
+        if (themeStatus) {
+            document.documentElement.style.setProperty('--preloader-background-color', '#202124');
+            document.documentElement.style.setProperty('--preloader-text-color', '#fff');
+        } else {
+            document.documentElement.style.setProperty('--preloader-background-color', '#fff');
+            document.documentElement.style.setProperty('--preloader-text-color', '#000');
+        }
+
+        window.addEventListener('load', function () {
+            setTimeout(hidePreloader, 5000); // Call hidePreloader after 5000 milliseconds if not already called by animation
+        });
+
+        function hidePreloader() {
+            var preloader = document.querySelector('.preloader');
+            preloader.style.opacity = '0';
+            setTimeout(function () {
+                preloader.style.display = 'none';
+            }, 200);
+        }
+    </script>
+</div>
+
+<main class="page-container" id="swup">
+
+	
+
+	<div class="main-content-container flex flex-col justify-between min-h-dvh">
+		<div class="main-content-header">
+			<header class="navbar-container px-6 md:px-12">
+    <div class="navbar-content transition-navbar ">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                Zarijaden Blog
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    首页
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/archives"
+                                        >
+                                    <i class="fa-regular fa-archive fa-fw"></i>
+                                    归档
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   target="_blank" rel="noopener" href="https://about.zarijaden.cc.cd"
+                                        >
+                                    <i class="fa-regular fa-user fa-fw"></i>
+                                    关于
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/bookmarks/"
+                                        >
+                                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                                    书签
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/masonry/"
+                                        >
+                                    <i class="fa-solid fa-image fa-fw"></i>
+                                    相册
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/timeline/"
+                                        >
+                                    <i class="fa-solid fa-code-branch fa-fw"></i>
+                                    时间轴
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown"
+                                   href="#"
+                                        onClick=&#34;return false;&#34;>
+                                    <i class="fa-solid fa-circle-plus fa-fw"></i>
+                                    更多
+                                    <i class="fa-solid fa-chevron-down fa-fw"></i>
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                        
+                                            <li>
+                                                <a href="/gh-cf/">
+                                                    GH链接转换器
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a href="/hpp/admin/login">
+                                                    设置
+                                                </a>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                    
+                    
+                        <li class="navbar-item search search-popup-trigger">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-dvh w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                首页
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/archives"
+                        >
+                            <span>
+                                归档
+                            </span>
+                            
+                                <i class="fa-regular fa-archive fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           target="_blank" rel="noopener" href="https://about.zarijaden.cc.cd"
+                        >
+                            <span>
+                                关于
+                            </span>
+                            
+                                <i class="fa-regular fa-user fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/bookmarks/"
+                        >
+                            <span>
+                                书签
+                            </span>
+                            
+                                <i class="fa-solid fa-bookmark fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/masonry/"
+                        >
+                            <span>
+                                相册
+                            </span>
+                            
+                                <i class="fa-solid fa-image fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/timeline/"
+                        >
+                            <span>
+                                时间轴
+                            </span>
+                            
+                                <i class="fa-solid fa-code-branch fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item-sub text-base my-1.5 flex flex-col w-full">
+                        
+                        <div class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary cursor-pointer text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                             navbar-data-toggle="submenu-更多"
+                        >
+                            <span>
+                                更多
+                            </span>
+                            
+                                <i class="fa-solid fa-chevron-right fa-sm fa-fw transition-all"></i>
+                            
+                        </div>
+                        
+
+                        
+                            <div class="flex-col items-start px-2 py-2 hidden" data-target="submenu-更多">
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           href="/gh-cf/">GH链接转换器</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           href="/hpp/admin/login">设置</a>
+                                    </div>
+                                
+                            </div>
+                        
+                    </li>
+            
+
+            
+            
+                
+                    
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
+                           href="/tags"
+                        >
+                            <span>Tags</span>
+                            <i class="fa-regular fa-tags fa-sm fa-fw"></i>
+                        </a>
+                    </li>
+                
+                    
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
+                           href="/links/"
+                        >
+                            <span>Links</span>
+                            <i class="fa-regular fa-link fa-sm fa-fw"></i>
+                        </a>
+                    </li>
+                
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">8</div>
+        <div class="label text-third-text-color text-sm">标签</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">0</div>
+        <div class="label text-third-text-color text-sm">分类</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">14</div>
+        <div class="label text-third-text-color text-sm">文章</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+		</div>
+
+		<div class="main-content-body transition-fade-up">
+			
+
+			<div class="main-content">
+				<div class="post-page-container flex relative justify-between box-border w-full h-full">
+	<div class="article-content-container">
+
+		<div class="article-title relative w-full">
+			
+			<div class="w-full flex items-center pt-6 justify-start">
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">后台手动部署网站功能</h1>
+			</div>
+			
+		</div>
+
+		
+		<div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+			<div class="avatar w-[46px] h-[46px] shrink-0 rounded-medium border border-border-color p-px">
+				<img src="/images/logo.jpg">
+			</div>
+			<div class="info flex flex-col justify-between">
+				<div class="author flex items-center">
+					<span class="name text-default-text-color text-lg font-semibold">Zarijaden</span>
+					
+				</div>
+				<div class="meta-info">
+					<div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2026-03-22</span>
+        <span class="mobile">2026-03-22</span>
+        <span class="hover-info">创建</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2026-06-20 20:49</span>
+            <span class="mobile">2026-06-20 20:49</span>
+            <span class="hover-info">更新</span>
+        </span>
+    
+
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/%E5%BC%80%E5%8F%91%E6%97%A5%E5%BF%97/">开发日志</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>2.8k 字</span>
+        </span>
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+				</div>
+			</div>
+		</div>
+		
+
+		
+
+
+		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+			<h1 id="2026-4-4新方案"><a href="#2026-4-4新方案" class="headerlink" title="2026.4.4新方案"></a>2026.4.4新方案</h1><p>Zexo 一键部署功能逻辑解析与实现</p>
+<p>在基于 Cloudflare Workers 的博客管理方案 Zexo 中，“一键部署”功能允许管理员在后台直接触发关联的 Pages 部署钩子，从而无需登录 Git 平台即可完成站点的自动构建与更新。本文将深入解析此功能的完整运作链路。</p>
+<h2 id="具体代码分析（使用AI编辑）"><a href="#具体代码分析（使用AI编辑）" class="headerlink" title="具体代码分析（使用AI编辑）"></a>具体代码分析（使用AI编辑）</h2><p>该功能本质上是为 Cloudflare Workers 脚本（即 Zexo）添加了一个专用的 API 端点。当用户在前台点击触发按钮时，前端会向此端点发送请求，后端接收到请求后，会向预设的 Cloudflare Pages 的 Deploy Hook URL 发起一个 POST 请求，从而触发一次全新的构建部署流程。</p>
+<ol>
+<li>前端触发逻辑</li>
+</ol>
+<p>前端逻辑定义在工具面板的 JavaScript 中。当用户点击“立即触发”按钮时，会调用<br>“zexo_trigger_deploy()” 函数。该函数通过 Fetch API 向 Workers 脚本自身的特定管理 API 发送请求，并根据返回结果弹出操作成功或失败的提示。</p>
+<p>核心代码片段 (<br>“tool.js” 中相关部分)</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">function zexo_trigger_deploy() &#123;</span><br><span class="line">    // 显示加载中的提示</span><br><span class="line">    swal(&#123;title: &quot;触发中...&quot;, icon: &quot;loading.gif&quot;, button: false, closeModal: false&#125;);</span><br><span class="line">    </span><br><span class="line">    // 调用后端部署触发 API</span><br><span class="line">    fetch(&#x27;/hpp/admin/api/trigger-deploy&#x27;, &#123; method: &#x27;POST&#x27; &#125;)</span><br><span class="line">        .then(response =&gt; &#123;</span><br><span class="line">            swal.close(); // 关闭加载提示</span><br><span class="line">            if (response.status === 200) &#123;</span><br><span class="line">                sweetAlert(&quot;成功&quot;, &quot;已成功触发 Pages 部署&quot;, &quot;success&quot;);</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                // 如果状态码不是200，尝试读取错误信息，否则给出通用失败提示</span><br><span class="line">                response.text().then(text =&gt; &#123;</span><br><span class="line">                    sweetAlert(&quot;触发失败&quot;, `状态码: $&#123;response.status&#125;`, &quot;error&quot;);</span><br><span class="line">                &#125;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">        .catch(error =&gt; &#123;</span><br><span class="line">            swal.close();</span><br><span class="line">            sweetAlert(&quot;错误&quot;, &quot;请求发送失败: &quot; + error, &quot;error&quot;);</span><br><span class="line">        &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+<p>代码介绍：</p>
+<p>此函数是用户交互的入口。</p>
+<ol>
+<li><p>用户反馈：首先调用<br>“swal” 显示一个“触发中…”的加载提示，提升用户体验。</p>
+</li>
+<li><p>发起请求：使用<br>“fetch” 函数向<br>“&#x2F;hpp&#x2F;admin&#x2F;api&#x2F;trigger-deploy” 路径发起一个 POST 请求。这是一个相对路径，请求会发送到当前服务的域名下，即 Zexo Workers 本身。</p>
+</li>
+<li><p>处理响应：</p>
+<ul>
+<li>无论成功与否，首先关闭加载提示 (<br>“swal.close()”)。</li>
+<li>检查 HTTP 状态码。若为<br>“200”，则弹出成功提示。</li>
+<li>若状态码非<br>“200” 或发生网络错误 (<br>“catch”)，则弹出包含错误信息的失败提示。</li>
+</ul>
+</li>
+<li><p>后端 API 实现逻辑</p>
+</li>
+</ol>
+<p>后端逻辑是整个功能的核心，在 Zexo 的主程序 (<br>“index.js”) 中实现。它需要完成权限验证、配置读取和最终向 Cloudflare Pages 发送构建请求三个关键步骤。</p>
+<p>核心代码片段 (<br>“index.js” 中<br>“&#x2F;hpp&#x2F;admin&#x2F;api&#x2F;trigger-deploy” 端点处理逻辑)</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">if (path == “/hpp/admin/api/trigger-deploy”) &#123;</span><br><span class="line">    // 1. 权限校验：必须为已登录的管理员</span><br><span class="line">    if (hpp_logstatus != 1) &#123;</span><br><span class="line">        return new Response(‘Unauthorized’, &#123; status: 401 &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    // 2. 获取配置中预设的 Deploy Hook URL</span><br><span class="line">    const hookUrl = hpp_deploy_hook_url;</span><br><span class="line">    </span><br><span class="line">    // 3. 向 Cloudflare Pages 的 Deploy Hook 发送 POST 请求</span><br><span class="line">    const deployRes = await fetch(hookUrl, &#123;</span><br><span class="line">        method: ‘POST’,</span><br><span class="line">        headers: &#123; ‘Content-Type’: ‘application/json’ &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    </span><br><span class="line">    // 4. 将 Cloudflare Pages 的响应状态返回给前端</span><br><span class="line">    const deployStatus = await deployRes.status;</span><br><span class="line">    if (deployStatus == 200 || deployStatus == 201) &#123;</span><br><span class="line">        return new Response(‘Deploy Triggered’, &#123; status: deployStatus &#125;);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        return new Response(‘Fail To Trigger Deploy’, &#123; status: deployStatus &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+<p>代码介绍：</p>
+<p>此代码块是 Workers 脚本中用于处理部署触发请求的端点。</p>
+<ol>
+<li>权限验证 (<br>“hpp_logstatus !&#x3D; 1”)：首先检查全局变量<br>“hpp_logstatus”。该变量在请求初始化阶段已通过验证 Cookie 中的用户名和密码 MD5 值完成设置。只有已登录的管理员请求才会通过此项检查，否则直接返回<br>“401 Unauthorized” 状态码。这确保了功能的安全性。</li>
+<li>读取配置 (<br>“hpp_deploy_hook_url”)：从已解析的全局配置对象中获取<br>“hpp_deploy_hook_url”。这个 URL 是在 Zexo 初始化配置时，由用户填写的 Cloudflare Pages 提供的专属部署钩子地址。</li>
+<li>触发构建 (<br>“fetch(hookUrl, …)”)：这是最核心的一步。使用<br>“fetch” 函数，以<br>“POST” 方法、<br>“application&#x2F;json” 的内容类型，向上述钩子 URL 发起一个空请求。Cloudflare Pages 服务在收到此请求后，便会开始一次新的构建和部署流程。</li>
+<li>响应转发：将 Cloudflare Pages 的响应状态码（通常成功触发为<br>“200” 或<br>“201”）原样转发给前端调用者。这样，前端 JavaScript 就能根据状态码判断触发是否成功，并给用户相应的提示。</li>
+</ol>
+<h2 id="运作逻辑总结"><a href="#运作逻辑总结" class="headerlink" title="运作逻辑总结"></a>运作逻辑总结</h2><p>整个一键部署功能的逻辑链路形成了一个清晰的责任链：</p>
+<ol>
+<li>交互层：用户在后台工具面板点击按钮。</li>
+<li>前端控制层：<br>“zexo_trigger_deploy()” 函数被调用，它负责向后端 API 发送请求并管理用户界面反馈（加载、成功&#x2F;失败提示）。</li>
+<li>网关与鉴权层：请求到达 Cloudflare Workers，由<br>“&#x2F;hpp&#x2F;admin&#x2F;api&#x2F;trigger-deploy” 端点处理。该端点首先执行严格的登录状态检查，确保只有授权用户才能触发部署。</li>
+<li>配置与执行层：通过校验后，端点从存储的配置中读取关键的 Deploy Hook URL，并向其发起一个简单的 HTTP POST 请求。</li>
+<li>外部服务层：Cloudflare Pages 服务接收到来自 Workers 的请求，随即开始执行其预设的构建流程（如从 Git 仓库拉取最新代码、执行构建命令、发布到全球网络）。</li>
+</ol>
+<h1 id="2026-3-22旧方案"><a href="#2026-3-22旧方案" class="headerlink" title="2026.3.22旧方案"></a>2026.3.22旧方案</h1><div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 调用后端接口，触发 Cloudflare Pages 部署</span><br><span class="line"> */</span><br><span class="line">async function triggerPagesDeploy() &#123;</span><br><span class="line">    const btn = document.getElementById(&#x27;deployTriggerBtn&#x27;);</span><br><span class="line">    const resultDiv = document.getElementById(&#x27;deployResult&#x27;) || document.createElement(&#x27;div&#x27;); // 结果展示区域</span><br><span class="line">    const originalBtnHTML = btn.innerHTML;</span><br><span class="line"></span><br><span class="line">    // 防止重复点击，更新按钮状态</span><br><span class="line">    btn.disabled = true;</span><br><span class="line">    btn.innerHTML = &#x27;&lt;i class=&quot;material-icons&quot;&gt;hourglass_empty&lt;/i&gt; 发送中...&#x27;;</span><br><span class="line"></span><br><span class="line">    // 显示加载状态</span><br><span class="line">    resultDiv.innerHTML = &#x27;&lt;div class=&quot;alert alert-info&quot;&gt;正在向服务器发送部署指令...&lt;/div&gt;&#x27;;</span><br><span class="line"></span><br><span class="line">    try &#123;</span><br><span class="line">        // 关键：调用您已实现的后端 API</span><br><span class="line">        const response = await fetch(&#x27;/hpp/admin/api/trigger-deploy&#x27;, &#123;</span><br><span class="line">            method: &#x27;POST&#x27;,</span><br><span class="line">            headers: &#123;</span><br><span class="line">                &#x27;Content-Type&#x27;: &#x27;application/json&#x27;,</span><br><span class="line">            &#125;,</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        const data = await response.json();</span><br><span class="line"></span><br><span class="line">        if (response.ok &amp;&amp; data.status === &#x27;success&#x27;) &#123;</span><br><span class="line">            resultDiv.innerHTML = `&lt;div class=&quot;alert alert-success&quot;&gt;</span><br><span class="line">                                        &lt;i class=&quot;material-icons&quot;&gt;check_circle&lt;/i&gt;</span><br><span class="line">                                        &lt;strong&gt;成功！&lt;/strong&gt; $&#123;data.message&#125;</span><br><span class="line">                                   &lt;/div&gt;`;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            resultDiv.innerHTML = `&lt;div class=&quot;alert alert-danger&quot;&gt;</span><br><span class="line">                                        &lt;i class=&quot;material-icons&quot;&gt;error&lt;/i&gt;</span><br><span class="line">                                        &lt;strong&gt;操作失败。&lt;/strong&gt; $&#123;data.message || &#x27;服务器返回错误&#x27;&#125;</span><br><span class="line">                                   &lt;/div&gt;`;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; catch (error) &#123;</span><br><span class="line">        console.error(&#x27;部署触发失败:&#x27;, error);</span><br><span class="line">        resultDiv.innerHTML = `&lt;div class=&quot;alert alert-danger&quot;&gt;</span><br><span class="line">                                    &lt;i class=&quot;material-icons&quot;&gt;error&lt;/i&gt;</span><br><span class="line">                                    &lt;strong&gt;网络请求失败。&lt;/strong&gt; 请检查控制台或网络连接。</span><br><span class="line">                               &lt;/div&gt;`;</span><br><span class="line">    &#125; finally &#123;</span><br><span class="line">        // 3秒后恢复按钮状态</span><br><span class="line">        setTimeout(() =&gt; &#123;</span><br><span class="line">            btn.disabled = false;</span><br><span class="line">            btn.innerHTML = originalBtnHTML;</span><br><span class="line">        &#125;, 3000);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+<p>以上是<code>triggerPagesDeploy()</code>的定义，为按钮的onClick参数服务</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line">// 在 index.js 文件的 handleRequest 函数中，找到 /hpp/admin/api/ 相关的 if 判断链。</span><br><span class="line"></span><br><span class="line">if (&quot;/hpp/admin/api/trigger-deploy&quot; == path) &#123;</span><br><span class="line">    // 1. 权限验证（复用现有逻辑）</span><br><span class="line">    if (hpp_logstatus != 1) &#123;</span><br><span class="line">        return new Response(&#x27;&#123;&quot;status&quot;: &quot;error&quot;, &quot;message&quot;: &quot;Unauthorized&quot;&#125;&#x27;, &#123; status: 401, headers: &#123; &quot;content-type&quot;: &quot;application/json&quot; &#125; &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 2. 定义您的 Cloudflare Pages Deploy Hook URL</span><br><span class="line">    // 【重要】请将下面的 URL 替换成您自己的 Hook URL！</span><br><span class="line">    const DEPLOY_HOOK_URL = &#x27;xxx&#x27;;</span><br><span class="line"></span><br><span class="line">    try &#123;</span><br><span class="line">        // 3. 向 Cloudflare 发送部署触发请求</span><br><span class="line">        const deployResponse = await fetch(DEPLOY_HOOK_URL, &#123;</span><br><span class="line">            method: &#x27;POST&#x27;,</span><br><span class="line">            headers: &#123;</span><br><span class="line">                &#x27;Content-Type&#x27;: &#x27;application/json&#x27;,</span><br><span class="line">            &#125;,</span><br><span class="line">            // Cloudflare Deploy Hook 通常不需要请求体，但保持 JSON 格式是好的做法</span><br><span class="line">            body: JSON.stringify(&#123;&#125;)</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        // 4. 处理并返回结果</span><br><span class="line">        if (deployResponse.ok) &#123;</span><br><span class="line">            const result = &#123;</span><br><span class="line">                status: &#x27;success&#x27;,</span><br><span class="line">                message: &#x27;已成功触发重新部署。Cloudflare Pages 构建任务已开始，请稍后查看部署状态。&#x27;</span><br><span class="line">            &#125;;</span><br><span class="line">            return new Response(JSON.stringify(result), &#123;</span><br><span class="line">                status: 200,</span><br><span class="line">                headers: &#123; &quot;content-type&quot;: &quot;application/json;charset=UTF-8&quot; &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            const errorText = await deployResponse.text();</span><br><span class="line">            console.error(&#x27;Deploy hook failed:&#x27;, deployResponse.status, errorText);</span><br><span class="line">            const result = &#123;</span><br><span class="line">                status: &#x27;error&#x27;,</span><br><span class="line">                message: `触发部署失败 (状态码: $&#123;deployResponse.status&#125;)`</span><br><span class="line">            &#125;;</span><br><span class="line">            return new Response(JSON.stringify(result), &#123;</span><br><span class="line">                status: 502, // Bad Gateway</span><br><span class="line">                headers: &#123; &quot;content-type&quot;: &quot;application/json;charset=UTF-8&quot; &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; catch (error) &#123;</span><br><span class="line">        // 5. 处理网络或其他异常</span><br><span class="line">        console.error(&#x27;Error triggering deploy:&#x27;, error);</span><br><span class="line">        const result = &#123;</span><br><span class="line">            status: &#x27;error&#x27;,</span><br><span class="line">            message: `请求发生错误: $&#123;error.message&#125;`</span><br><span class="line">        &#125;;</span><br><span class="line">        return new Response(JSON.stringify(result), &#123;</span><br><span class="line">            status: 500,</span><br><span class="line">            headers: &#123; &quot;content-type&quot;: &quot;application/json;charset=UTF-8&quot; &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+<p>以上是<code>/api/trigger-deploy</code>api的定义，为<code>triggerPagesDeploy()</code>函数服务</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 以下 HTML 代码块可以添加到工具箱页面的合适位置，例如在其他工具卡片之后 --&gt;</span><br><span class="line">&lt;div class=&quot;card&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;card-header card-header-info&quot;&gt;</span><br><span class="line">        &lt;h4 class=&quot;card-title&quot;&gt;博客站点部署&lt;/h4&gt;</span><br><span class="line">        &lt;p class=&quot;card-category&quot;&gt;触发 Cloudflare Pages 重新构建与部署&lt;/p&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;card-body&quot;&gt;</span><br><span class="line">        &lt;p&gt;此操作将触发与 HexoPlusPlus 关联的 Cloudflare Pages 项目 (&lt;strong&gt;zari-blog&lt;/strong&gt;) 重新构建。系统将从 Git 仓库拉取最新代码并执行部署流程。&lt;/p&gt;</span><br><span class="line">        &lt;div class=&quot;alert alert-warning&quot;&gt;</span><br><span class="line">            &lt;i class=&quot;material-icons&quot;&gt;warning&lt;/i&gt;</span><br><span class="line">            &lt;span&gt;部署过程需要一定时间，期间网站访问可能不稳定。请谨慎操作。&lt;/span&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">        &lt;button type=&quot;button&quot; class=&quot;btn btn-info&quot; onclick=&quot;triggerPagesDeploy()&quot; id=&quot;deployTriggerBtn&quot;&gt;</span><br><span class="line">            &lt;i class=&quot;material-icons&quot;&gt;cloud_upload&lt;/i&gt; 立即触发重新部署</span><br><span class="line">        &lt;/button&gt;</span><br><span class="line">        &lt;div id=&quot;deployResult&quot; style=&quot;margin-top: 15px;&quot;&gt;&lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">/**</span><br><span class="line"> * 触发 Cloudflare Pages 重新部署</span><br><span class="line"> */</span><br><span class="line">async function triggerPagesDeploy() &#123;</span><br><span class="line">    const btn = document.getElementById(&#x27;deployTriggerBtn&#x27;);</span><br><span class="line">    const resultDiv = document.getElementById(&#x27;deployResult&#x27;);</span><br><span class="line">    const originalBtnHTML = btn.innerHTML;</span><br><span class="line"></span><br><span class="line">    // 防止重复点击</span><br><span class="line">    btn.disabled = true;</span><br><span class="line">    btn.innerHTML = &#x27;&lt;i class=&quot;material-icons&quot;&gt;hourglass_empty&lt;/i&gt; 部署请求发送中...&#x27;;</span><br><span class="line"></span><br><span class="line">    resultDiv.innerHTML = &#x27;&lt;div class=&quot;alert alert-info&quot;&gt;正在发送部署指令，请稍候...&lt;/div&gt;&#x27;;</span><br><span class="line"></span><br><span class="line">    try &#123;</span><br><span class="line">        const response = await fetch(&#x27;/hpp/admin/api/trigger-deploy&#x27;, &#123;</span><br><span class="line">            method: &#x27;POST&#x27;,</span><br><span class="line">            headers: &#123;</span><br><span class="line">                &#x27;Content-Type&#x27;: &#x27;application/json&#x27;,</span><br><span class="line">            &#125;,</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        const data = await response.json();</span><br><span class="line"></span><br><span class="line">        if (response.ok &amp;&amp; data.status === &#x27;success&#x27;) &#123;</span><br><span class="line">            resultDiv.innerHTML = `&lt;div class=&quot;alert alert-success&quot;&gt;</span><br><span class="line">                                        &lt;i class=&quot;material-icons&quot;&gt;check_circle&lt;/i&gt;</span><br><span class="line">                                        &lt;strong&gt;成功！&lt;/strong&gt; $&#123;data.message&#125;</span><br><span class="line">                                   &lt;/div&gt;`;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            resultDiv.innerHTML = `&lt;div class=&quot;alert alert-danger&quot;&gt;</span><br><span class="line">                                        &lt;i class=&quot;material-icons&quot;&gt;error&lt;/i&gt;</span><br><span class="line">                                        &lt;strong&gt;操作失败。&lt;/strong&gt; $&#123;data.message || &#x27;未知错误&#x27;&#125;</span><br><span class="line">                                   &lt;/div&gt;`;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; catch (error) &#123;</span><br><span class="line">        console.error(&#x27;部署触发失败:&#x27;, error);</span><br><span class="line">        resultDiv.innerHTML = `&lt;div class=&quot;alert alert-danger&quot;&gt;</span><br><span class="line">                                    &lt;i class=&quot;material-icons&quot;&gt;error&lt;/i&gt;</span><br><span class="line">                                    &lt;strong&gt;网络请求失败。&lt;/strong&gt; 请检查控制台或网络连接。</span><br><span class="line">                               &lt;/div&gt;`;</span><br><span class="line">    &#125; finally &#123;</span><br><span class="line">        // 3秒后恢复按钮状态</span><br><span class="line">        setTimeout(() =&gt; &#123;</span><br><span class="line">            btn.disabled = false;</span><br><span class="line">            btn.innerHTML = originalBtnHTML;</span><br><span class="line">        &#125;, 3000);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure></div>
+<p>以上是<code>工具</code>页面部署按钮的片段，用于前端操作</p>
+
+		</div>
+
+		
+		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+			<div class="article-copyright-info-container">
+    <ul>
+        <li><strong>标题:</strong> 后台手动部署网站功能</li>
+        <li><strong>作者:</strong> Zarijaden</li>
+        <li><strong>创建于
+                :</strong> 2026-03-22 00:00:00</li>
+        
+            <li>
+                <strong>更新于
+                    :</strong> 2026-06-20 20:00:49
+            </li>
+        
+        <li>
+            <strong>链接:</strong> https://zarijaden.cc.cd/2026/03/21/2026-03-22-后台部署功能/
+        </li>
+        <li>
+            <strong>
+                版权声明:
+            </strong>
+            
+
+            
+                本文章采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a> 进行许可。
+            
+        </li>
+    </ul>
+</div>
+
+		</div>
+		
+
+		
+		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/%E5%BC%80%E5%8F%91%E6%97%A5%E5%BF%97/">#开发日志</a>&nbsp;
+			</li>
+			
+		</ul>
+		
+
+		
+
+		
+		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+			
+			<div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="prev" rel="prev" href="/2026/04/28/2026-04-29-%E5%8D%97%E5%B1%B1%E5%AF%B9%E8%AE%B2%E4%BF%9D%E6%B4%BB/">
+					<span class="left arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-left"></i>
+					</span>
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">南山对讲保活</span>
+						<span class="post-nav-item">上一篇</span>
+					</span>
+				</a>
+			</div>
+			
+			
+			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="next" rel="next" href="/2026/03/14/2026-03-15-%E5%AE%B6%E4%B9%A1%E7%9A%84%E5%90%8D%E7%89%87/">
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">家乡的名片</span>
+						<span class="post-nav-item">下一篇</span>
+					</span>
+					<span class="right arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-right"></i>
+					</span>
+				</a>
+			</div>
+			
+		</div>
+		
+
+
+		
+		<div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+			<div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        评论
+    </div>
+    
+
+        
+            
+    <div id="giscus-container"></div>
+    <script data-swup-reload-script defer>
+        (function() {
+            const containerId = "giscus-container";
+            const mapping = "pathname";
+            const lang = "en";
+            const inputPosition = "bottom";
+            const reactionsEnabled = "1" === "1";
+            const emitMetadata = "1" === "1";
+            const strict = "0" === "1";
+            const loading = "lazy";
+
+            const getTerm = () => {
+                if (mapping === "pathname") return location.pathname;
+                if (mapping === "url") return location.href;
+                if (mapping === "title") return document.title;
+                if (mapping === "og:title") {
+                    const ogTitle = document.querySelector("meta[property='og:title']");
+                    return ogTitle?.content || document.title;
+                }
+                return "";
+            };
+
+            const sendUpdate = () => {
+                const iframe = document.querySelector("iframe.giscus-frame");
+                if (!iframe) {
+                    return;
+                }
+
+                const setConfig = {
+                    theme: "preferred_color_scheme",
+                    lang,
+                    inputPosition,
+                    reactionsEnabled,
+                    emitMetadata,
+                    strict,
+                };
+
+                if (mapping !== "number") {
+                    const term = getTerm();
+                    if (term) {
+                        setConfig.term = term;
+                    }
+                }
+
+                iframe.contentWindow.postMessage(
+                    { giscus: { setConfig } },
+                    "https://giscus.app",
+                );
+            };
+
+            const loadGiscus = () => {
+                const container = document.getElementById(containerId);
+                if (!container) {
+                    return;
+                }
+
+                const iframe = container.querySelector("iframe.giscus-frame");
+                if (iframe) {
+                    sendUpdate();
+                    return;
+                }
+
+                if (container.dataset.giscusInit === "true") {
+                    return;
+                }
+
+                const giscusConfig = {
+                    src: "https://giscus.app/client.js",
+                    "data-repo": "Zarijaden/blog",
+                    "data-repo-id": "R_kgDORQUF1g",
+                    "data-category": "Announcements",
+                    "data-category-id": "DIC_kwDORQUF1s4C2eQr",
+                    "data-mapping": mapping,
+                    "data-strict": "0",
+                    "data-reactions-enabled": "1",
+                    "data-emit-metadata": "1",
+                    "data-theme": "preferred_color_scheme",
+                    "data-lang": lang,
+                    "data-input-position": inputPosition,
+                    "data-loading": loading,
+                    crossorigin: "anonymous",
+                    async: true,
+                };
+
+                const giscusScript = document.createElement("script");
+                for (const key in giscusConfig) {
+                    giscusScript.setAttribute(key, giscusConfig[key]);
+                }
+                container.appendChild(giscusScript);
+                container.dataset.giscusInit = "true";
+            };
+
+            const runGiscus = () => {
+                const container = document.getElementById(containerId);
+                if (!container) {
+                    return;
+                }
+
+                if (container.querySelector("iframe.giscus-frame")) {
+                    sendUpdate();
+                    return;
+                }
+
+                loadGiscus();
+            };
+
+            runGiscus();
+        })();
+    </script>
+
+
+        
+    
+</div>
+
+		</div>
+		
+	</div>
+
+	
+	<div class="toc-content-container">
+		<div class="post-toc-wrap">
+	<div class="post-toc">
+		<div class="toc-title">目录</div>
+		<div class="page-title">后台手动部署网站功能</div>
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#2026-4-4%E6%96%B0%E6%96%B9%E6%A1%88"><span class="nav-text">2026.4.4新方案</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B7%E4%BD%93%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%EF%BC%88%E4%BD%BF%E7%94%A8AI%E7%BC%96%E8%BE%91%EF%BC%89"><span class="nav-text">具体代码分析（使用AI编辑）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%90%E4%BD%9C%E9%80%BB%E8%BE%91%E6%80%BB%E7%BB%93"><span class="nav-text">运作逻辑总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2026-3-22%E6%97%A7%E6%96%B9%E6%A1%88"><span class="nav-text">2026.3.22旧方案</span></a></li></ol>
+
+	</div>
+</div>
+	</div>
+	
+</div>
+
+			</div>
+
+			
+		</div>
+
+		<div class="main-content-footer">
+			<footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2026</span>
+              -
+            
+            2026&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Zarijaden</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        共撰写了 14 篇文章
+                    </span>
+                    
+                        <span>
+                            共 11.5k 字
+                        </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">访问人数</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">总访问量</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">由 <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a> 驱动</span>
+            <span class="text-sm lg:block">主题&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.9.0</a></span>
+        </div>
+        
+        
+            <div>
+                博客已运行 <span class="odometer" id="runtime_days" ></span> 天 <span class="odometer" id="runtime_hours"></span> 小时 <span class="odometer" id="runtime_minutes"></span> 分钟 <span class="odometer" id="runtime_seconds"></span> 秒
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+		</div>
+	</div>
+
+	
+	<div class="post-tools">
+		<div class="post-tools-container">
+	<ul class="article-tools-list">
+		<!-- TOC aside toggle -->
+		
+		<li class="right-bottom-tools page-aside-toggle">
+			<i class="fa-regular fa-outdent"></i>
+		</li>
+		
+
+		<!-- go comment -->
+		
+		<li class="go-comment">
+			<i class="fa-regular fa-comments"></i>
+		</li>
+		
+	</ul>
+</div>
+	</div>
+	
+
+	<div class="right-side-tools-container">
+		<div class="side-tools-container">
+	<ul class="hidden-tools-list">
+		<li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-plus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-minus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+			<i class="fa-regular fa-moon"></i>
+		</li>
+
+		<!-- rss -->
+		
+
+		
+		<li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+			<i class="fa-regular fa-arrow-up"></i>
+		</li>
+		
+
+		<li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+			<i class="fa-regular fa-arrow-down"></i>
+		</li>
+	</ul>
+
+	<ul class="visible-tools-list">
+		<li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+			<i class="fa-regular fa-cog fa-spin"></i>
+		</li>
+		
+		
+	</ul>
+</div>
+	</div>
+
+	<div class="image-viewer-container" role="dialog" aria-modal="true" aria-label="图片查看器">
+	<button class="image-viewer-close" type="button" aria-label="关闭">
+		<i class="fa-solid fa-xmark"></i>
+	</button>
+	<button class="image-viewer-prev" type="button" aria-label="上一页">
+		<i class="fa-solid fa-chevron-left"></i>
+	</button>
+	<div class="image-viewer-frame">
+		<img src="" alt="">
+	</div>
+	<div class="image-viewer-exif-panel hidden absolute left-1/2 bottom-20 -translate-x-1/2 w-[min(92vw,420px)] max-h-[60vh] overflow-hidden rounded-2xl bg-background-color-transparent-80 p-4 text-left shadow-redefine-flat backdrop-blur-md" role="dialog" aria-label="EXIF" aria-hidden="true">
+		<div class="flex items-center justify-between mb-3">
+			<span class="text-sm font-semibold text-first-text-color">EXIF</span>
+			<button class="image-viewer-exif-close flex h-8 w-8 items-center justify-center rounded-full bg-background-color-transparent-80 text-first-text-color transition hover:bg-background-color-transparent-40" type="button" aria-label="关闭">
+				<i class="fa-solid fa-xmark text-[0.65rem]"></i>
+			</button>
+		</div>
+		<div class="image-viewer-exif-cards grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[50vh] overflow-y-auto pr-1 scrollbar-hide"></div>
+		<template class="image-viewer-exif-card-template">
+			<div class="rounded-lg bg-background-color-transparent-40 px-3 py-2">
+				<div class="image-viewer-exif-card-header flex items-center gap-2 mb-1">
+					<i class="image-viewer-exif-card-icon fa-solid fa-circle-info text-xs text-third-text-color"></i>
+					<div class="image-viewer-exif-card-title text-xs font-semibold text-first-text-color"></div>
+				</div>
+				<div class="image-viewer-exif-card-items flex flex-col gap-1"></div>
+			</div>
+		</template>
+	</div>
+	<button class="image-viewer-exif-toggle flex items-center gap-2 hidden absolute left-1/2 bottom-6 -translate-x-1/2 rounded-full border border-border-color bg-background-color-transparent-80 px-4 py-2 text-first-text-color backdrop-blur-md transition hover:bg-background-color-transparent-40" type="button" aria-label="EXIF" aria-expanded="false">
+		<i class="fa-solid fa-circle-info text-xs"></i>
+		<span class="text-xs font-semibold uppercase tracking-wider">EXIF</span>
+	</button>
+	<button class="image-viewer-next" type="button" aria-label="下一页">
+		<i class="fa-solid fa-chevron-right"></i>
+	</button>
+</div>
+
+
+	
+	<div class="search-pop-overlay">
+	<div class="popup search-popup">
+		<div class="search-header">
+			<span class="search-input-field-pre">
+				<i class="fa-solid fa-keyboard"></i>
+			</span>
+			<div class="search-input-container">
+				<input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="站内搜索您需要的内容..." spellcheck="false" type="search" class="search-input">
+			</div>
+			<span class="popup-btn-close">
+				<i class="fa-solid fa-times"></i>
+			</span>
+		</div>
+		<div id="search-result">
+			<div id="no-result">
+				<i class="fa-solid fa-spinner fa-spin-pulse fa-5x fa-fw"></i>
+			</div>
+		</div>
+	</div>
+</div>
+	
+
+</main>
+
+
+<script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/Swup.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/SwupSlideTheme.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/SwupScriptsPlugin.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/SwupProgressPlugin.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/SwupScrollPlugin.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/SwupPreloadPlugin.min.js" ></script>
+<script>
+    window.swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+
+    window.dispatchEvent(
+        new CustomEvent("redefine:swup:ready", {
+            detail: {
+                swup: window.swup,
+            },
+        }),
+    );
+</script>
+
+
+
+
+	<script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/main.js" ></script>
+
+
+    <script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/odometer.min.js" ></script>
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/assets/odometer-theme-minimal.css">
+
+
+
+
+
+
+  <script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/Typed.min.js" ></script>
+
+
+
+
+
+
+
+    <script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/minimasonry.min.js" data-swup-reload-script></script>
+
+
+<script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/moment-with-locales.min.js" data-swup-reload-script></script>
+
+
+	
+</body>
+
+</html>
