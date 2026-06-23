@@ -18,9 +18,11 @@ jobs:
         with:
           workflow: sync.yml
           token: ${{ secrets.SYNC_TOKEN }}
-
-      - name: Wait before Deploy
-        run: sleep 60
+          ref: main
+          wait-for-completion: true
+          wait-timeout-seconds: 120
+          wait-interval-seconds: 10
+          sync-status: true
 
       - name: Trigger Deploy
         uses: benc-uk/workflow-dispatch@v1
