@@ -29,3 +29,4 @@ jobs:
         with:
           workflow: deploy.yml
           token: ${{ secrets.SYNC_TOKEN }}
+          wait-for-completion: true
