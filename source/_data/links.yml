@@ -5,17 +5,14 @@
       link: https://zeropersan.github.io/
       description: MC玩家Zeropersan的博客
       avatar: /images/255639988.png
-      thumbnail:
     - name: Steven_mc
       link: https://steven.wuaze.com/
       description: Steven_mc的论坛（匿名发帖）
       avatar: /images/stvicon.jpg
-      thumbnail: 
     - name: 桑葚不太甜
       link: https://ssbtt114514.github.io/
       description: 
       avatar: https://q.qlogo.cn/headimg_dl?dst_uin=1973737092&spec=140&t=1781952159696
-      thumbnail:
 - links_category: 志同道合
   has_thumbnail: false
   list:
@@ -23,17 +20,7 @@
       link: https://blog.lczhuigz.top/
       description: You Only Live Once
       avatar: https://blog.lczhuigz.top/images/fav-icon/fav-icon.jpg
-      thumbnail: 
     - name: lalalll's blog
       link: https://lalalll-lalalll.github.io
       description: 结月小站
       avatar: https://lalalll-lalalll.github.io/images/MerpisMe.png
-      thumbnail: 
-- links_category: 浪花（上网冲浪时的风景）
-  has_thumbnail: false
-  list:
-    - name: CFITSec
-      link: https://cfitsec.cn
-      description: 
-      avatar: https://cfitsec.cn/favicon.ico
-      thumbnail:
