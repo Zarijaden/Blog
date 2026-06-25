@@ -24,3 +24,10 @@
       link: https://lalalll-lalalll.github.io/
       description: 结月小站
       avatar: https://lalalll-lalalll.github.io/images/MerpisMe.png
+- links_category: 浪花（上网冲浪时的风景）
+  has_thumbnail: false
+  list:
+    - name: CFITSec
+      link: https://cfitsec.cn
+      description: 
+      avatar: https://cfitsec.cn/favicon.ico
