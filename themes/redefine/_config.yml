@@ -236,7 +236,7 @@ navbar:
       icon: fa-regular fa-circle-plus
       submenus:
         gh链接转换器: /gh-cf/
-        
+        诗洞话词典: https://dict.zarijaden.cc.cd/
         Bookmarks: /bookmarks/
         相册: /masonry/
         时间轴: /timeline/
