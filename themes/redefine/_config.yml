@@ -131,8 +131,8 @@ home_banner:
   style: fixed # static or fixed
   # Home banner image
   image: 
-    light: /images/light.png # light mode
-    dark: /images/dark.png # dark mode
+    light: /images/light.webp # light mode
+    dark: /images/dark.webp # dark mode
   # Home banner title
   title: Zarijaden Blog
   # Home banner subtitle
