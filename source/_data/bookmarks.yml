@@ -87,3 +87,9 @@
     - name: Cloudflare Dashboard
       link: https://dash.cloudflare.com/
       image: https://dash.cloudflare.com/favicon.ico
+    - name: ChatGPT
+      link: https://chatgpt.com/
+      image: https://chatgpt.com/cdn/assets/favicon-eex17e9e.ico
+    - name: ChatGPT
+      link: https://copilot.microsoft.com/
+      image: https://copilot.microsoft.com/static/cmc/images/meta-image.jpg
