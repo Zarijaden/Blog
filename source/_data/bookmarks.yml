@@ -78,7 +78,7 @@
       description: 屏幕共享
       image: https://pin.gl/favicon.ico
     - name: Imgloc
-      link: https://imgloc.com/
+      link: https://imgloc.com/share-image.png
       description: 免费图床
       image: https://imgloc.com/content/images/system/favicon_1737318962702_48e5be.png
     - name: McNav
@@ -86,4 +86,4 @@
       image: https://www.mcnav.net/favicon.ico
     - name: Cloudflare Dashboard
       link: https://dash.cloudflare.com/
-      image: https://dash.cloudflare.com/favicon-32x32.png
+      image: https://dash.cloudflare.com/favicon.ico
