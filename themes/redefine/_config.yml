@@ -272,7 +272,7 @@ home:
         path: /tags
         icon: fa-regular fa-tags # can be empty
       Dash: 
-        path: /hpp/admin/login
+        path: /zexo/admin/login
         icon: fa-regular fa-gear
       #   path: /categories 
       #   icon: fa-regular fa-folder # can be empty
