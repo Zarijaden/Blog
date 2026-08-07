@@ -105,7 +105,7 @@ deploy:
   repository: git@github.com:Zarijaden/Zarijaden.github.io.git
   branch: master
 
-all_minifier: true
+all_minifier: false
 
 sitemap:
   path:
